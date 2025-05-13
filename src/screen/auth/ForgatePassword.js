@@ -15,11 +15,11 @@ import { createStyles } from './auth';
 import { useWindowDimensions } from 'react-native';
 
 
-const PasswordScreen = ({navigation}) => {
-    const { width } =useWindowDimensions()
-    const isTablet = width >= 460;
-  
-    const styles = useMemo(() => createStyles(isTablet), [isTablet]);
+const ForgatePasswordScreen = ({navigation}) => {
+      const { width } = useWindowDimensions()
+        const isTablet = width >= 460;
+      
+        const styles = useMemo(() => createStyles(isTablet), [isTablet]);
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
@@ -31,9 +31,9 @@ const PasswordScreen = ({navigation}) => {
           />
         </View>
 
-        <Text style={styles.heading}>Enter Your Password</Text>
+        <Text style={styles.heading}>Forgot Password?</Text>
         <Text style={styles.subText}>
-        Enter your password to continue and take the next step toward success.
+        Enter your email to continue and regain access to your account.
         </Text>
    
 
@@ -48,23 +48,12 @@ const PasswordScreen = ({navigation}) => {
           />
         </View>
 
-        <TouchableOpacity
-  style={[
-    styles.signInButton,
-    { marginTop: isTablet ? 30 : 230 }
-  ]}
-  onPress={() => navigation.navigate('SelectField')}
->
-  <Text style={styles.signInText}>Continue</Text>
-  <AntDesign name="right" size={15} color="#fff" style={styles.rightarrow} />
-</TouchableOpacity>
+        <TouchableOpacity style={[styles.signInButton, { marginTop: 230 }]}onPress={() => navigation.navigate('ForgateVerify')}>
+          <Text style={styles.signInText}>Contineu</Text>
+             <AntDesign name="right" size={15} color="#fff"  style={styles.rightarrow}/>
+        </TouchableOpacity>
 
-
-        <View style={styles.bottomRow}>
-          <TouchableOpacity>
-            <Text style={styles.forgotText}>Forgot Password?</Text>
-          </TouchableOpacity>
-        </View>
+  
 
       
       </ScrollView>
@@ -72,7 +61,7 @@ const PasswordScreen = ({navigation}) => {
   );
 };
 
-export default PasswordScreen;
+export default ForgatePasswordScreen;
 
 
 

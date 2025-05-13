@@ -1,4 +1,4 @@
-import React from 'react';
+import {React,  useMemo } from 'react';
 import {
   View,
   Text,
@@ -8,13 +8,21 @@ import {
   TouchableOpacity,
   ScrollView,
   StatusBar,
+ 
 } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import styles from './auth';
+import { createStyles } from './auth'; 
+
 
 const SigningScreen = ({navigation}) => {
+  const { width } = useWindowDimensions(); 
+  const isTablet = width >= 460;
+
+  const styles = useMemo(() => createStyles(isTablet), [isTablet]);
+
   return (
     <SafeAreaView style={styles.safeArea}>
       
@@ -63,13 +71,13 @@ const SigningScreen = ({navigation}) => {
         </TouchableOpacity>
 
         <View style={styles.bottomRow}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>navigation.navigate('Forgate')}>
             <Text style={styles.forgotText}>Forgot Password?</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.registerRow}>
-          <Text>New to us? </Text>
+          <Text style={styles.us}>New to us? </Text>
           <TouchableOpacity>
             <Text style={styles.registerText}>Register</Text>
           </TouchableOpacity>

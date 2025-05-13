@@ -9,6 +9,21 @@ import SelectUserScreen from './src/screen/auth/SelectUserFrom';
 import LetsgoScreen from './src/screen/auth/Letsgo';
 import EmailVerificationScreen from './src/screen/auth/Verity';
 import IndustryLocationScreen from './src/screen/auth/IndustryLocationScreen';
+import NotificationScreen from './src/screen/auth/Notification';
+import InformationScreen from './src/screen/auth/Information';
+import StartScreen from './src/screen/auth/Startjob';
+import BottomTabs from './src/navigation/Bottomnav';
+import SearchPageScreen from './src/screen/search/Searchpage';
+import { Settings } from 'react-native';
+import AccountSettings from './src/screen/profile/AccountSetting';
+import AccountInformation from './src/screen/profile/AccountInformation';
+import AddPhoneNumberScreen from './src/screen/profile/AddPhoneNumber';
+import PaymentMethodsScreen from './src/screen/profile/PaymentMethod';
+import UploadedImagesScreen from './src/screen/profile/UploadingImg';
+import ContactUsScreen from './src/screen/profile/Contactus';
+import AddNewCardScreen from './src/screen/profile/AddCardNew';
+import EditProfileScreen from './src/screen/profile/EditProfile';
+import BasicDetailsScreen from './src/screen/profile/BasicDetail';
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -23,69 +38,24 @@ export default function App() {
         <Stack.Screen name='Letsgo' component={LetsgoScreen}/>
         <Stack.Screen name='Emailverify' component={EmailVerificationScreen}/>   
         <Stack.Screen name='IndustryLocation'     component={IndustryLocationScreen}/> 
-      </Stack.Navigator>
+        <Stack.Screen name='Notification' component={NotificationScreen}/>
+        <Stack.Screen name='Information' component={InformationScreen}/>
+ 
+        <Stack.Screen name='Startjob' component={StartScreen}/>
+        <Stack.Screen name='Home' component={BottomTabs}/>
+        <Stack.Screen name='SearchPage' component={SearchPageScreen}/>
+        <Stack.Screen name='Setting' component={AccountSettings}/>
+        <Stack.Screen name='AccountInformation' component={AccountInformation}/>
+        <Stack.Screen name='AddPhone' component={AddPhoneNumberScreen}/>
+        <Stack.Screen name='PaymentMethodsScreen' component={PaymentMethodsScreen}/>
+        <Stack.Screen name='UploadingImg' component={UploadedImagesScreen}/>
+        <Stack.Screen name='Contact' component={ContactUsScreen}/>
+        <Stack.Screen name='AddNewCard' component={AddNewCardScreen}/>
+        <Stack.Screen name='EditProfile' component={EditProfileScreen}/>
+        <Stack.Screen name='BasicDetail' component={BasicDetailsScreen}/>
+
+
+     </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-
-
-
-// import React, { useState } from 'react';
-// import { View, Text, TouchableOpacity, StyleSheet, Platform, Alert } from 'react-native';
-// import Geolocation from 'react-native-geolocation-service';
-// import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
-
-// const AskLocation = () => {
-//   const [coords, setCoords] = useState(null);
-
-//   const requestPermission = async () => {
-//     const permissionType =
-//       Platform.OS === 'ios'
-//         ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE
-//         : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION;
-
-//     const result = await request(permissionType);
-
-//     if (result === RESULTS.GRANTED) {
-//       Geolocation.getCurrentPosition(
-//         (position) => {
-//           setCoords(position.coords);
-//         },
-//         (error) => {
-//           Alert.alert('Location Error', error.message);
-//         },
-//         { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-//       );
-//     } else {
-//       Alert.alert('Permission Denied', 'Location access is needed.');
-//     }
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <TouchableOpacity onPress={requestPermission} style={styles.button}>
-//         <Text style={styles.buttonText}>Get My Location</Text>
-//       </TouchableOpacity>
-//       {coords && (
-//         <Text style={styles.coordsText}>
-//           Lat: {coords.latitude}, Lon: {coords.longitude}
-//         </Text>
-//       )}
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: { padding: 20 },
-//   button: {
-//     backgroundColor: '#2B6CB0',
-//     padding: 14,
-//     borderRadius: 10,
-//     alignItems: 'center',
-//   },
-//   buttonText: { color: '#fff', fontWeight: 'bold' },
-//   coordsText: { marginTop: 20, fontSize: 16 },
-// });
-
-// export default AskLocation;

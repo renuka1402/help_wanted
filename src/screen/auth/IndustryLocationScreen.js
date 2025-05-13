@@ -1,25 +1,60 @@
-import React from 'react';
+import {React,  useMemo ,useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Image,
-  SafeAreaView,
   TextInput,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  StatusBar,
+  Dimensions
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { createStyles } from './auth'; // ✅ Correct
 
+import Geolocation from '@react-native-community/geolocation'; // install this if not using Expo
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Feather from 'react-native-vector-icons/Feather';
+import { useWindowDimensions } from 'react-native';
 
-const IndustryLocationScreen = () => {
+const IndustryLocationScreen = ({navigation}) => {
+      const { width } =useWindowDimensions()
+        const isTablet = width >= 460;
+      
+        const styles = useMemo(() => createStyles(isTablet), [isTablet]);
+  const [industry, setIndustry] = useState('');
+  const [location, setLocation] = useState('');
+
+  const getLocation = async () => {
+    if (Platform.OS === 'android') {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+      );
+      if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+        Alert.alert('Permission denied', 'Location permission is required.');
+        return;
+      }
+    }
+
+    Geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setLocation(`Lat: ${latitude.toFixed(3)}, Lon: ${longitude.toFixed(3)}`);
+      },
+      (error) => {
+        Alert.alert('Error', error.message);
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+    );
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.content}>
-
-        {/* Back button could be added here if needed */}
-
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.container}>
+        {/* Logo */}
         <View style={styles.logoContainer}>
           <Image
             source={require('../../assests/images/logo.png')}
@@ -40,101 +75,114 @@ const IndustryLocationScreen = () => {
           <TextInput
             style={styles.input}
             placeholder="Industry"
-            placeholderTextColor="#A0AEC0"
+            placeholderTextColor="#000"
+            value={industry}
+            onChangeText={setIndustry}
           />
         </View>
 
-        <View style={styles.inputContainer}>
+        <TouchableOpacity style={styles.inputContainer} onPress={getLocation}>
           <Feather name="map-pin" size={18} color="#A0AEC0" style={styles.icon} />
-          <TextInput
-            style={styles.input}
-            placeholder="Location"
-            placeholderTextColor="#A0AEC0"
-          />
-        </View>
-
-        <TouchableOpacity style={styles.continueButton}>
-          <Text style={styles.continueText}>Continue</Text>
-          <Feather name="arrow-right" size={18} color="#fff" style={{ marginLeft: 6 }} />
+          <Text style={[styles.input, { paddingVertical: 10 }]}>
+            {location || ' Location'}
+          </Text>
         </TouchableOpacity>
 
+        <TouchableOpacity   style={[
+    styles.signInButton,
+    { marginTop: isTablet ? 10 : 120 }
+  ]}onPress={() => navigation.navigate('Notification')}>
+          <Text style={styles.signInText}>Continue</Text>
+          <AntDesign name="right" size={15} color="#fff"  style={styles.rightarrow}/>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#EDF2F7',
-  },
-  content: {
-    padding: 20,
-  },
-  logoContainer: {
-    alignItems: 'center',
-    marginVertical: 20,
-    marginTop:50,
-  },
-  logo: {
-    width: 280,
-    height: 130,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#1A202C',
-    marginBottom: 10,
-  },
-  instruction: {
-    fontSize: 13,
-    color: '#4A5568',
-    marginBottom: 20,
-  },
-  bold: {
-    fontWeight: 'bold',
-    color: '#1A202C',
-  },
-  email: {
-    fontWeight: '600',
-    color: '#1A202C',
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 3,
-    marginBottom: 15,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 1 },
-    shadowRadius: 2,
-  },
-  icon: {
-    marginRight: 10,
-  },
-  input: {
-    flex: 1,
-    color: '#1A202C',
-    fontSize: 14,
-  },
-  continueButton: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(32, 41, 84, 1)',
-    paddingVertical: 12,
-    borderRadius: 10,
-    marginTop: 180,
-  },
-  continueText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-});
+// ... (Keep the existing styles)
+
+
+
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#EDF2F7',
+//   },
+//   content: {
+//     padding: 20,
+//   },
+//   logoContainer: {
+//     alignItems: 'center',
+//     marginTop: 60,
+//     marginBottom: 30,
+//   },
+//   logo: {
+//     width: 280,
+//     height: 130,
+//   },
+//   title: {
+//     fontSize: 18,
+//     fontWeight: '600',
+//     marginBottom: 10,
+//     color: '#111',
+//     marginTop: 20,
+//   },
+  // instruction: {
+  //   fontSize: 13,
+  //   color: '#4A5568',
+  //   marginBottom: 20,
+  // },
+  // bold: {
+  //   fontWeight: 'bold',
+  //   color: '#1A202C',
+  // },
+//   email: {
+//     fontWeight: '600',
+//     color: '#1A202C',
+//   },
+//   inputContainer: {
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     backgroundColor: '#fff',
+//     borderRadius: 10,
+//     paddingHorizontal: 10,
+//     paddingVertical: 3,
+//     marginBottom: 15,
+//     elevation: 2,
+//     shadowColor: '#000',
+//     shadowOpacity: 0.05,
+//     shadowOffset: { width: 0, height: 1 },
+//     shadowRadius: 2,
+//   },
+//   icon: {
+//     marginRight: 30,
+//     marginLeft: 25,
+//   },
+//   input: {
+//     flex: 1,
+//     color: '#1A202C',
+//     fontSize: 14,
+//   },
+//   continueButton: {
+//     flexDirection: 'row',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     backgroundColor: 'rgba(32, 41, 84, 1)',
+//     paddingVertical: 12,
+//     borderRadius: 10,
+//     marginTop: 110,
+//   },
+//   continueText: {
+//     color: '#fff',
+//     fontSize: 16,
+//     fontWeight: '600',
+//   },
+//   rightarrow: {
+//     position: 'absolute',
+//     right: 10,
+//   },
+// });
 
 export default IndustryLocationScreen;
